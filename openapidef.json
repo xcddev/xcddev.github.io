@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "https://xcdcloud.lightning.force.com/services/data/v60.0"
+            "url": "https://yearendreg--ye22reg.sandbox.my.salesforce.com/services/data/v60.0"
         }
     ],
     "security": [
@@ -13306,7 +13306,7 @@
         "securitySchemes": {
             "openIDConnectDiscovery": {
                 "type": "openIdConnect",
-                "openIdConnectUrl": "https://login.salesforce.com/.well-known/openid-configuration"
+                "openIdConnectUrl": "https://test.salesforce.com/.well-known/openid-configuration"
             },
             "bearerAuth": {
                 "type": "http",
@@ -13318,7 +13318,7 @@
                 "description": "For more information on all supported OAuth Flows, please see 'https://help.salesforce.com/articleView?id=remoteaccess_oauth_flows.htm&type=5'. For more information on all available scope options, please see 'https://help.salesforce.com/articleView?id=remoteaccess_oauth_tokens_scopes.htm&type=5#oauth_scopes'. ",
                 "flows": {
                     "implicit": {
-                        "authorizationUrl": "https://login.salesforce.com/services/oauth2/authorize",
+                        "authorizationUrl": "https://test.salesforce.com/services/oauth2/authorize",
                         "scopes": {
                             "visualforce": "Allows access to customer-created Visualforce pages only. This scope doesn’t allow access to standard Salesforce UIs.",
                             "address": "Allows access to the identity URL service. You can request profile, email, address, or phone individually to get the same result as using id; they are all synonymous.",
@@ -13340,14 +13340,14 @@
                         }
                     },
                     "password": {
-                        "tokenUrl": "https://login.salesforce.com/services/oauth2/token",
+                        "tokenUrl": "https://test.salesforce.com/services/oauth2/token",
                         "scopes": {
                             "api": "Allows access to the current, logged-in user’s account using APIs, such as REST API and Bulk API. This scope also includes chatter_api, which allows access to Connect REST API resources."
                         }
                     },
                     "authorizationCode": {
-                        "authorizationUrl": "https://login.salesforce.com/services/oauth2/authorize",
-                        "tokenUrl": "https://login.salesforce.com/services/oauth2/token",
+                        "authorizationUrl": "https://test.salesforce.com/services/oauth2/authorize",
+                        "tokenUrl": "https://test.salesforce.com/services/oauth2/token",
                         "scopes": {
                             "visualforce": "Allows access to customer-created Visualforce pages only. This scope doesn’t allow access to standard Salesforce UIs.",
                             "address": "Allows access to the identity URL service. You can request profile, email, address, or phone individually to get the same result as using id; they are all synonymous.",
