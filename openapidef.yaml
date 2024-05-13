@@ -7,18 +7,8 @@ schemes:
   - https  
 servers:
   - url: 'http://yearendreg--ye22reg.sandbox.my.salesforce.com/services/data/v60.0'
-securityDefinitions:
-  UserSecurity:
-    type: basic  
-  OauthSecurity:
-    type: oauth2
-    flow: password
-    tokenUrl: 'https://test.salesforce.com/services/oauth2/token'
-    scopes:
-      admin: api scope
-      user: api scope  
 security:
-  - basicAuth: []
+  - bearerAuth: []
 paths:
   /sobjects/xcdhcm__Claim__c:
     description: >-
