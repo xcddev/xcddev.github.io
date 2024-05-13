@@ -16,7 +16,9 @@ securityDefinitions:
     tokenUrl: 'https://test.salesforce.com/services/oauth2/token'
     scopes:
       admin: api scope
-      user: api scope    
+      user: api scope  
+security:
+  - basicAuth: []
 paths:
   /sobjects/xcdhcm__Claim__c:
     description: >-
