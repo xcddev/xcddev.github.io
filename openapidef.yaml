@@ -9,14 +9,7 @@ servers:
   - url: 'https://yearendreg--ye22reg.sandbox.my.salesforce.com/services/data/v60.0'
 securityDefinitions:
   UserSecurity:
-    type: basic
-  OauthSecurity:
-    type: oauth2
-    flow: password
-    tokenUrl: 'https://test.salesforce.com/services/oauth2/token'
-    scopes:
-      admin: admin scope
-      user: user scope
+    type: basic  
 paths:
   /sobjects/xcdhcm__Claim__c:
     description: >-
