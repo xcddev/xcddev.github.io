@@ -5,8 +5,7 @@ info:
   version: '60.0'
 schemes:
   - https  
-servers:
-  - url: 'https://yearendreg--ye22reg.sandbox.my.salesforce.com/services/data/v60.0'
+host: https://yearendreg--ye22reg.sandbox.my.salesforce.com/services/data/v60.0  
 securityDefinitions:
   UserSecurity:
     type: basic  
