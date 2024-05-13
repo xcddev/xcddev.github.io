@@ -9642,7 +9642,7 @@ components:
               type: string
             url:
               type: string 
-securitySchemes:
+  securitySchemes:
     openIDConnectDiscovery:
       type: openIdConnect
       openIdConnectUrl: 'https://test.salesforce.com/.well-known/openid-configuration'
