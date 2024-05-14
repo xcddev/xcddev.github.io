@@ -9729,7 +9729,7 @@ components:
               encompasses all other scopes. full doesn’t return a refresh token.
               You must explicitly request the refresh_token scope to get a
               refresh token.
-          client_id: '3MVG91LYYD8O4krRArs2l2r9GBLtMvZryzvoEXmb1sP0pvZQipYSmHRPfIJztREmJHREmeHyx3yFMvbe5ci8I'
+          clientId: '3MVG91LYYD8O4krRArs2l2r9GBLtMvZryzvoEXmb1sP0pvZQipYSmHRPfIJztREmJHREmeHyx3yFMvbe5ci8I'
         password:
           tokenUrl: 'https://test.salesforce.com/services/oauth2/token'
           scopes:
