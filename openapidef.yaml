@@ -5,8 +5,6 @@ info:
   version: '60.0'
 schemes:
   - https  
-servers:
-  - url: 'http://yearendreg--ye22reg.sandbox.my.salesforce.com/services/data/v60.0'
 security:
   - bearerAuth: []
   - oAuth2: []
