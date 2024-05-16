@@ -7,6 +7,7 @@ schemes:
   - https
 servers:
   - url: 'http://yearendreg--ye22reg.sandbox.my.salesforce.com/services/data/v60.0'
+  - url: 'http://https://xcdcloud.my.salesforce.com/services/data/v60.0'
 security:
   - bearerAuth: []
   - oAuth2: []
