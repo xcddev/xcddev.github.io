@@ -6,7 +6,7 @@ info:
 schemes:
   - https
 servers:
-  - url: 'https://cleanlightning.lightning.force.com/services/data/v60.0'
+  - url: 'https://cleanlightning.my.salesforce.com/services/data/v60.0'
 security:
   - bearerAuth: []
   - oAuth2: []
