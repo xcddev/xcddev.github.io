@@ -9654,7 +9654,6 @@ components:
       flows:
         implicit:
           authorizationUrl: 'https://login.salesforce.com/services/oauth2/authorize'
-          clientId: '3MVG91LYYD8O4krRArs2l2r9GBLtMvZryzvoEXmb1sP0pvZQipYSmHRPfIJztREmJHREmeHyx3yFMvbe5ci8I'
           scopes:
             api: >-
               Allows access to the current, logged-in user’s account using APIs,
