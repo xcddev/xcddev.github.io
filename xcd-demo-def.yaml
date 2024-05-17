@@ -9653,7 +9653,7 @@ components:
         'https://help.salesforce.com/articleView?id=remoteaccess_oauth_tokens_scopes.htm&type=5#oauth_scopes'. 
       flows:
         implicit:
-          authorizationUrl: 'https://test.salesforce.com/services/oauth2/authorize'
+          authorizationUrl: 'https://login.salesforce.com/services/oauth2/authorize'
           clientId: '3MVG91LYYD8O4krRArs2l2r9GBLtMvZryzvoEXmb1sP0pvZQipYSmHRPfIJztREmJHREmeHyx3yFMvbe5ci8I'
           scopes:
             api: >-
