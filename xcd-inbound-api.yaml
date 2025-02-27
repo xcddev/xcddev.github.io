@@ -1,0 +1,140 @@
+openapi: 3.0.3
+info:
+  title: XCD APIs
+  version: '1.0'
+  description: >-
+    The XCD API enables seamless integration with the XCD HR & Payroll
+    application deployed on a client's Salesforce organization, facilitating HR
+    operations such as leave management, expense creation, and timesheet
+    submission. Designed for efficiency, the API supports both synchronous and
+    asynchronous calls and is optimized for handling large datasets through bulk
+    operations.
+paths:
+  /xcdio__Leave_API__c:
+    post:
+      tags:
+        - Leave
+      summary: Book Leave in XCD HR
+      operationId: ''
+      requestBody:
+        description: Book Leave in XCD HR
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/xcdio__Leave_API__c'
+            example:
+              records:
+                - xcdio__Leave_Category__c: "Annual Leave"
+                  xcdio__Employee_Details__c: "a29Q1000000t6zFIAQ"
+                  xcdio__Start_Date__c: "2025-01-10"
+                  xcdio__Start_Date_AM_PM_All_Day__c: "All Day"
+                  xcdio__End_Date__c: "2025-01-12"
+                  xcdio__End_Date_AM_PM_All_Day__c: "All Day"
+                - xcdio__Leave_Category__c: "Sick Leave"
+                  xcdio__Employee_Details__c: "a29Q1000000t6zFIAQ"
+                  xcdio__Start_Date__c: "2025-02-05"
+                  xcdio__Start_Date_AM_PM_All_Day__c: "All Day"
+                  xcdio__End_Date__c: "2025-02-06"
+                  xcdio__End_Date_AM_PM_All_Day__c: "All Day"
+                  xcdio__Illness__c: "Other"
+              response_fields: "xcdio__Leave_Request__c"
+              asynchronous: "false"
+              allOrNone: "true"
+              
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leave_response'          
+        default:
+          description: Default error sample response
+components:
+  schemas:
+    xcdio__Leave_API__c:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/record_detail' 
+        response_fields:
+          type: string
+          example: xcdio__Leave_Request__c
+        asynchronous:
+          type: string
+          example: "false"
+        allOrNone:
+          type: string
+          example: "true"
+          
+    leave_response:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/response_record' 
+    
+    response_record:
+      type: object
+      properties:
+        success:
+          type: string
+          example: Annual Leave
+        xcdio__Employee_Details__c:
+          type: string
+          example: a29Q1000000t6zFIAQ
+        xcdio__Start_Date__c:
+          type: string
+          format: date
+          example: '2025-01-10'
+        xcdio__Start_Date_AM_PM_All_Day__c:
+          type: string
+          example: All Day
+        xcdio__End_Date__c:
+          type: string
+          format: date
+          example: '2025-01-10'
+        xcdio__End_Date_AM_PM_All_Day__c:
+          type: string
+          example: All Day
+        xcdio__Illness__c:
+          type: string
+          example: Others    
+    
+    record_detail:
+      type: object
+      properties:
+        xcdio__Leave_Category__c:
+          type: string
+          example: Annual Leave
+        xcdio__Employee_Details__c:
+          type: string
+          example: a29Q1000000t6zFIAQ
+        xcdio__Start_Date__c:
+          type: string
+          format: date
+          example: '2025-01-10'
+        xcdio__Start_Date_AM_PM_All_Day__c:
+          type: string
+          example: All Day
+        xcdio__End_Date__c:
+          type: string
+          format: date
+          example: '2025-01-10'
+        xcdio__End_Date_AM_PM_All_Day__c:
+          type: string
+          example: All Day
+        xcdio__Illness__c:
+          type: string
+          example: Others
+          
+servers:
+  - url: https://{mydomain}.my.salesforce.com/services/apexrest/xcdio/xcdapi/v1.0
+    variables: {}
+tags:
+  - name: Leave
+    description: 'Book, edit and cancel leave in XCD '
