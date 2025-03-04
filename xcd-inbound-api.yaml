@@ -3,8 +3,8 @@ info:
   title: XCD Product APIs
   version: '1.0'
   description: >-
-    The XCD Product APIs enable seamless integration with the XCD HR & Payroll
-    application deployed in a client's Salesforce organization, facilitating HR
+    The XCD Product APIs enables seamless integration with the XCD HR & Payroll
+    application deployed on a client's Salesforce organization, facilitating HR
     operations such as leave management, expense creation, and timesheet
     submission. Designed for efficiency, the API supports both synchronous and
     asynchronous calls and is optimized for handling large datasets through bulk
@@ -15,9 +15,9 @@ paths:
       tags:
         - Leave
       summary: Book Leave
+      operationId: ''
       requestBody:
-        description: Request to book leave.
-        required: true
+        description: Book Leave
         content:
           application/json:
             schema:
@@ -40,35 +40,127 @@ paths:
               response_fields: "xcdio__Leave_Request__c"
               asynchronous: "false"
               allOrNone: "true"
+              
+        required: true
       responses:
         '200':
-          description: Leave request successfully processed.
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookLeaveApiResponseSuccess' 
+              example:
+                - success: true
+                  errors: []
+                  xcdio__Leave_Request__c: a10Q100000kS97VIAS
+                  Id: a29Q1000000t6zFIAQ
+                  record_Sequence: 1
+                - success: false
+                  errors: ["Sorry, the new Leave/Absence request could not be created as the dates entered for the new Leave/Absence request coincides/overlap with the dates of an existing Leave/Absence. Please confirm the dates and try again for the Role(s):  Dev"]
+                  xcdio__Leave_Request__c: null
+                  Id: null
+                  record_Sequence: 2
         '400':
-          description: Request failed due to invalid input.
+          description: Request Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookLeaveApiResponseFailure' 
+              example:
+                - success: false
+                  errors: ["System.CalloutException: Invalid API Version"]
+                  
         '403':
-          description: Insufficient permissions.
+          description: Insufficient Permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookLeaveApiResponseFailure' 
+              example:
+                - success: false
+                  errors: ["sObject type 'xcdio__Leave_API__c' is not supported. If you are attempting to use a custom object, be sure to append the '__c' after the entity name. Please reference your WSDL or the describe call for the appropriate names."]
         '500':
-          description: Internal server error.
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookLeaveApiResponseFailure' 
+              example:
+                - success: false
+                  errors: ["NullPointerException: ..."]
+        
+        default:
+          description: Default error sample response
     patch:
       tags:
         - Leave
       summary: Edit & Cancel Leave
+      operationId: ''
       requestBody:
-        description: Request to edit or cancel a leave entry.
-        required: true
+        description: Edit & Cancel Leave
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/EditLeave'
+            example:
+              records:
+                - xcdio__Leave_request__c: "a10Q100000iqtztIAA"
+                  xcdio__Approval_Status__c: "Cancelled"
+                - xcdio__Leave_request__c: "a10Q100000iqtzsIAA"
+                  xcdio__Approval_Status__c: "Recalled"
+              asynchronous: "false"
+              allOrNone: "true"
+              
+        required: true
       responses:
         '200':
-          description: Leave request successfully updated or canceled.
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookLeaveApiResponseSuccess' 
+              example:
+                - success: true
+                  errors: []
+                  xcdio__Leave_Request__c: a10Q100000kS97VIAS
+                  Id: a29Q1000000t6zFIAQ
+                  record_Sequence: 1
+                - success: true
+                  errors: []
+                  xcdio__Leave_Request__c: a10S900000Mqng1IAB
+                  Id: a28S9000000TCAgIAO
+                  record_Sequence: 2
         '400':
-          description: Request failed due to validation errors.
+          description: Request Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookLeaveApiResponseFailure' 
+              example:
+                - success: false
+                  errors: ["System.CalloutException: Invalid API Version"]
+                  
         '403':
-          description: Insufficient permissions.
+          description: Insufficient Permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookLeaveApiResponseFailure' 
+              example:
+                - success: false
+                  errors: ["sObject type 'xcdio__Leave_API__c' is not supported. If you are attempting to use a custom object, be sure to append the '__c' after the entity name. Please reference your WSDL or the describe call for the appropriate names."]
         '500':
-          description: Internal server error.
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookLeaveApiResponseFailure' 
+              example:
+                - success: false
+                  errors: ["NullPointerException: ..."]
+        
+        default:
+          description: Default error sample response
 components:
   schemas:
     BookLeave:
@@ -78,36 +170,24 @@ components:
       properties:
         records:
           type: array
-          description: >-
-            A list of leave requests to be created. Each request follows the 
-            BookLeaveRecordDetail schema. Every XCD API has a defined limit 
-            on the number of records allowed per synchronous request, 
-            configured in the "XCD Integration API" custom metadata. 
-            Asynchronous requests can contain up to 10,000 records.
+          description: Array of leave request records to be created which is described in BookLeaveRecordDetail schema. Every XCD API has a threshold number of records which can be passed in a single synchronous request defined in "XCD Integration API" custom metadata. The number of records in an asynchronous request can be upto 10,000.
           items:
-            $ref: '#/components/schemas/BookLeaveRecordDetail'
+            $ref: '#/components/schemas/BookLeaveRecordDetail' 
         response_fields:
           type: string
-          description: >-
-            A comma-separated list of fields from the API object. Additional 
-            fields can be dynamically queried using this parameter.
-          example: xcdio__Leave_Request__c, xcdio__Approval_Status__c
+          description: Comma separated list of fields in the API Object. Any new field can be added in the API object and dynamically queried using this field. 
+          example: xcdio__Leave_Request__c or xcdio__Leave_Request__c, xcdio__Approval_Status__c
         asynchronous:
           type: string
-          description: >-
-            Defines whether the request is executed synchronously or asynchronously. 
-            Synchronous requests return responses immediately. 
-            Asynchronous requests return a batch ID, which can be used to check 
-            the processing status.
+          description: Request execution context. Synchronous requests will give response as part of the same request. Asynchronous request return a single batch_Id for the entire array which can be further queried for the request status and other fields. 
           format: boolean
           default: "false"
         allOrNone:
           type: string
           format: boolean
           default: true
-          description: >-
-            If set to true, the system allows partial processing of records. 
-            If any record fails validation, the rest will still be processed.
+          description: Allow partial leave records to be created if one or more of the records array is having any validation error. 
+          
     BookLeaveRecordDetail:
       type: object
       properties:
@@ -116,36 +196,38 @@ components:
           enum:
             - Annual Leave
             - Sick Leave
-          description: The type of leave requested, as defined in XCD HRMS.
+          description: The category of leave defined in XCD HRMS
+          example: Annual Leave
         xcdio__Employee_Details__c:
           type: string
-          description: The Salesforce record ID of the employee requesting leave.
+          description: Salesforce record id of the employee for whom the leave is to be booked. 
+          example: a29Q1000000t6zFIAQ
         xcdio__Start_Date__c:
           type: string
           format: date
-          description: The start date of the leave period.
+          description: Leave start date.
+          example: '2025-01-10'
         xcdio__Start_Date_AM_PM_All_Day__c:
           type: string
           enum:
             - AM
             - PM
             - All Day
-          description: >-
-            Specifies whether the leave starts in the morning (AM), afternoon (PM), 
-            or spans the entire day (All Day).
+          description: Leave start slot.  
+          example: All Day for full day, or PM if the leave starts from second half of the day. 
         xcdio__End_Date__c:
           type: string
           format: date
-          description: The end date of the leave period.
+          description: Leave end date.
+          example: '2025-01-10'
         xcdio__End_Date_AM_PM_All_Day__c:
           type: string
           enum:
             - AM
             - PM
             - All Day
-          description: >-
-            Specifies whether the leave ends in the morning (AM), afternoon (PM), 
-            or spans the entire day (All Day).
+          description: Leave end slot.
+          example: All Day for full day, or AM if the leave is until first half of the day. 
         xcdio__Illness__c:
           type: string
           enum:
@@ -165,9 +247,47 @@ components:
             - Stomach
             - Stress
             - Other
-          description: >-
-            Applicable only for sick leave. The list of values may vary based on 
-            client-specific customizations.
+          description: Applicable for sickness only. The enum values may vary depending on client customisations. 
+          example: Others
+          
+    BookLeaveApiResponseSuccess:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: "true"
+          description: The status of the leave request record in the request array. 
+        errors:
+          type: array
+          items:
+            type: string
+          example:  []
+        xcdio__Leave_Request__c:
+          type: string
+          example: a10Q100000kS97VIAS
+          description: Salesforce record id of the leave request. 
+        Id:
+          type: string
+          example: a29Q1000000t6zFIAQ
+          description: Salesforce record id of the api object record.
+        record_Sequence:
+          type: integer
+          description: Sequence number of the record provided in the request array. 
+          example: 1
+          
+    BookLeaveApiResponseFailure:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: The status of the leave request record in the request array. 
+          example: "true"
+        errors:
+          type: array
+          items:
+            type: string
+          example:  []
+          
     EditLeave:
       type: object
       required:
@@ -175,40 +295,33 @@ components:
       properties:
         records:
           type: array
-          description: >-
-            A list of leave requests to be edited or canceled. Each request 
-            follows the EditLeaveRecordDetail schema. The request limit is 
-            defined in the "XCD Integration API" custom metadata. 
-            Asynchronous requests can contain up to 10,000 records.
+          description: Array of leave request records to be edited which is described in EditLeaveRecordDetail schema. Every XCD API has a threshold number of records which can be passed in a single synchronous request defined in "XCD Integration API" custom metadata. The number of records in an asynchronous request can be upto 10,000.
           items:
-            $ref: '#/components/schemas/EditLeaveRecordDetail'
+            $ref: '#/components/schemas/EditLeaveRecordDetail' 
         asynchronous:
           type: string
-          description: >-
-            Defines whether the request is executed synchronously or asynchronously.
-            Synchronous requests return responses immediately. 
-            Asynchronous requests return a batch ID, which can be used to check 
-            the processing status.
+          description: Request execution context. Synchronous requests will give response as part of the same request. Asynchronous request return a single batch_Id for the entire array which can be further queried for the request status and other fields. 
           format: boolean
           default: "false"
         allOrNone:
           type: string
           format: boolean
           default: true
-          description: >-
-            If set to true, the system allows partial processing of records. 
-            If any record fails validation, the rest will still be processed.
+          description: Allow partial leave records to be created if one or more of the records array is having any validation error. 
+    
     EditLeaveRecordDetail:
       type: object
       properties:
         xcdio__Leave_request__c:
           type: string
-          description: The Salesforce record ID of the leave request to be modified.
+          description: Salesforce record id of the leave request to be edited or canceled. 
+          example: a10Q100000iqtztIAA
         xcdio__Approval_Status__c:
           type: string
-          description: The updated approval status (e.g., "Cancelled").
+          example: Cancelled
 servers:
   - url: https://{mydomain}.my.salesforce.com/services/apexrest/xcdio/xcdapi/v1.0
+    variables: {}
 tags:
   - name: Leave
-    description: Book, edit, and cancel leave in XCD.
+    description: 'Book, edit and cancel leave in XCD'
