@@ -15,7 +15,7 @@ paths:
       tags:
         - Leave
       summary: Book Leave
-      operationId: 'BookLeave'
+      operationId: ''
       requestBody:
         description: Book Leave
         content:
@@ -95,7 +95,7 @@ paths:
       tags:
         - Leave
       summary: Edit & Cancel Leave
-      operationId: 'EditLeave'
+      operationId: ''
       requestBody:
         description: Edit & Cancel Leave
         content:
@@ -165,34 +165,49 @@ components:
   schemas:
     BookLeave:
       type: object
+      required:
+        - records
       properties:
         records:
           type: array
+          description: Array of leave request records to be created which is described in BookLeaveRecordDetail schema. Every XCD API has a threshold number of records which can be passed in a single synchronous request defined in "XCD Integration API" custom metadata. The number of records in an asynchronous request can be upto 10,000.
           items:
             $ref: '#/components/schemas/BookLeaveRecordDetail' 
         response_fields:
           type: string
-          example: xcdio__Leave_Request__c
+          description: Comma separated list of fields in the API Object. Any new field can be added in the API object and dynamically queried using this field. 
+          example: xcdio__Leave_Request__c or xcdio__Leave_Request__c, xcdio__Approval_Status__c
         asynchronous:
           type: string
-          example: "false"
+          description: Request execution context. Synchronous requests will give response as part of the same request. Asynchronous request return a single batch_Id for the entire array which can be further queried for the request status and other fields. 
+          format: boolean
+          default: "false"
         allOrNone:
           type: string
-          example: "true"
+          format: boolean
+          default: true
+          description: Allow partial leave records to be created if one or more of the records array is having any validation error. 
           
     EditLeave:
       type: object
+      required:
+        - records
       properties:
         records:
           type: array
+          description: Array of leave request records to be edited which is described in EditLeaveRecordDetail schema. Every XCD API has a threshold number of records which can be passed in a single synchronous request defined in "XCD Integration API" custom metadata. The number of records in an asynchronous request can be upto 10,000.
           items:
             $ref: '#/components/schemas/EditLeaveRecordDetail' 
         asynchronous:
           type: string
-          example: "false"
+          description: Request execution context. Synchronous requests will give response as part of the same request. Asynchronous request return a single batch_Id for the entire array which can be further queried for the request status and other fields. 
+          format: boolean
+          default: "false"
         allOrNone:
           type: string
-          example: "true"
+          format: boolean
+          default: true
+          description: Allow partial leave records to be created if one or more of the records array is having any validation error. 
     
     BookLeaveApiResponseSuccess:
       type: object
@@ -200,6 +215,7 @@ components:
         success:
           type: boolean
           example: "true"
+          description: The status of the leave request record in the request array. 
         errors:
           type: array
           items:
@@ -208,11 +224,14 @@ components:
         xcdio__Leave_Request__c:
           type: string
           example: a10Q100000kS97VIAS
+          description: Salesforce record id of the leave request. 
         Id:
           type: string
           example: a29Q1000000t6zFIAQ
+          description: Salesforce record id of the api object record.
         record_Sequence:
           type: integer
+          description: Sequence number of the record provided in the request array. 
           example: 1
           
     BookLeaveApiResponseFailure:
@@ -220,6 +239,7 @@ components:
       properties:
         success:
           type: boolean
+          description: The status of the leave request record in the request array. 
           example: "true"
         errors:
           type: array
@@ -232,26 +252,61 @@ components:
       properties:
         xcdio__Leave_Category__c:
           type: string
+          enum:
+            - Annual Leave
+            - Sick Leave
+          description: The category of leave defined in XCD HRMS
           example: Annual Leave
         xcdio__Employee_Details__c:
           type: string
+          description: Salesforce record id of the employee for whom the leave is to be booked. 
           example: a29Q1000000t6zFIAQ
         xcdio__Start_Date__c:
           type: string
           format: date
+          description: Leave start date.
           example: '2025-01-10'
         xcdio__Start_Date_AM_PM_All_Day__c:
           type: string
-          example: All Day
+          enum:
+            - AM
+            - PM
+            - All Day
+          description: Leave start slot.  
+          example: All Day for full day, or PM if the leave starts from second half of the day. 
         xcdio__End_Date__c:
           type: string
           format: date
+          description: Leave end date.
           example: '2025-01-10'
         xcdio__End_Date_AM_PM_All_Day__c:
           type: string
-          example: All Day
+          enum:
+            - AM
+            - PM
+            - All Day
+          description: Leave end slot.
+          example: All Day for full day, or AM if the leave is until first half of the day. 
         xcdio__Illness__c:
           type: string
+          enum:
+            - Back & neck
+            - Chest & respiratory
+            - Covid-19 confirmed
+            - Covid-19 suspected
+            - Covid-19 self-isolating
+            - Diabetes
+            - Eyes, ear, nose, mouth
+            - Genito-urinary
+            - Heart
+            - Infection
+            - Musculo-skeletal
+            - Neurological
+            - Pregnancy
+            - Stomach
+            - Stress
+            - Other
+          description: Applicable for sickness only. The enum values may vary depending on client customisations. 
           example: Others
     
     EditLeaveRecordDetail:
@@ -259,6 +314,7 @@ components:
       properties:
         xcdio__Leave_request__c:
           type: string
+          description: Salesforce record id of the leave request to be edited or canceled. 
           example: a10Q100000iqtztIAA
         xcdio__Approval_Status__c:
           type: string
