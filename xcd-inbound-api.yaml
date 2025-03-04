@@ -15,7 +15,7 @@ paths:
       tags:
         - Leave
       summary: Book Leave
-      operationId: ''
+      operationId: 'BookLeave'
       requestBody:
         description: Book Leave
         content:
@@ -95,7 +95,7 @@ paths:
       tags:
         - Leave
       summary: Edit & Cancel Leave
-      operationId: ''
+      operationId: 'EditLeave'
       requestBody:
         description: Edit & Cancel Leave
         content:
