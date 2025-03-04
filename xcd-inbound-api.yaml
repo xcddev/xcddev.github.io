@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: XCD Product APIs
+  title: XCD Employee360 APIs
   version: '1.0'
   description: >-
     The XCD Product APIs enable seamless integration with the XCD HR & Payroll
