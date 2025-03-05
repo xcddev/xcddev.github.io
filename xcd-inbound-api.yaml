@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
-  title: XCD Employee360 APIs
+  title: XCD PeopleOps APIs
   version: '1.0'
   description: >-
-    The XCD Product APIs enable seamless integration with the XCD HR & Payroll
+    The XCD PeopleOps APIs enable seamless integration with the XCD HR & Payroll
     application deployed on a client's Salesforce organization, facilitating HR
     operations such as leave management, expense creation, and timesheet
     submission. Designed for efficiency, the API supports both synchronous and
