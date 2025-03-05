@@ -427,7 +427,7 @@ components:
           type: string
           example: Cancelled
 servers:
-  - url: https://{mydomain}.my.salesforce.com/services/{uri}
+  - url: https://{mydomain}.my.salesforce.com/services/
     #description: Server for different paths
     variables:
       uri:
