@@ -244,11 +244,11 @@ paths:
               examples:
                 Query XCD Employee/Personal/Job role response:
                   value:
-                      data: {}
-                      errors: [{"message":"Field 'xcdio__Statuss__c' does not exist on type 'xcdio__API_System_Attributes__r'.","locations":[{"line":5,"column":13}],"path":["edges",0,"node","xcdio__API_System_Attributes__r","xcdio__Statuss__c"],"extensions":{"code":"FIELD_NOT_FOUND","details":"The requested field does not exist in the schema."}}]
+                      data: {"uiapi":{"query":{"xcdhcm__Employee_Detail__c":{"edges":[{"node":{"Id":"a0WPt0000019TtRMAU","Name":{"value":"Test Employee"},"xcdhcm__Employee_Number__c":{"value":"wjD 4"},"xcdhcm__Work_email__c":{"value":"bsq@peoplexcd.com"},"xcdhcm__Start_Date__c":{"value":"2024-04-01"},"xcdhcm__Leaving_Date__c":{"value":null},"xcdhcm__Payroll_start_date__c":{"value":"2024-04-01"},"xcdhcm__Personal_L__r":{"Id":"a1VPt000001kXq1MAE","xcdhcm__First_name__c":{"value":"Test"},"xcdhcm__Middle_name__c":{"value":null},"xcdhcm__Home_phone__c":{"value":"99999"}},"xcdhcm__Job_Role__r":{"xcdhcm__Department_L__r":{"xcdhcm__Departments_code__c":{"value":"1234"}}}}}]}}}}
+                      errors: []
                 Query Aysnc Batch ID Response (Success):
                   value:
-                      data: {"edges":[{"node":{"Id":"a28Pt000000x0LmIAI","xcdio__API_System_Attributes__r":{"xcdio__Status__c":{"value":"Completed"},"xcdio__CRUD_Type__c":{"value":"Create"},"xcdio__Success__c":{"value":true}},"xcdio__Leave_Request__r":{"Id":"a10Pt00000aqPQbIAM","Name":{"value":"LR-0018"},"xcdhcm__Approval_Status__c":{"value":"Approved"}}}}]}
+                      data: {"uiapi":{"query":{"xcdio__Leave_API__c":{"edges":[{"node":{"Id":"a28Pt000000x0LmIAI","xcdio__API_System_Attributes__r":{"xcdio__Status__c":{"value":"Completed"},"xcdio__CRUD_Type__c":{"value":"Create"},"xcdio__Success__c":{"value":true}},"xcdio__Leave_Request__r":{"Id":"a10Pt00000aqPQbIAM","Name":{"value":"LR-0018"},"xcdhcm__Approval_Status__c":{"value":"Approved"}}}}]}}}}
                       errors: []
                         
                 Query Aysnc Batch ID Response (Error):
