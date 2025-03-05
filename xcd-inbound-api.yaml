@@ -427,10 +427,10 @@ components:
           type: string
           example: Cancelled
 servers:
-  - url: https://{mydomain}.my.salesforce.com/services/{URI}
+  - url: https://{mydomain}.my.salesforce.com/services/{uri}
     #description: Server for different paths
     variables:
-      URI:
+      uri:
         enum:
           - apexrest/xcdio/xcdapi/v1.0
           - data/v61.0/graphql
