@@ -15,6 +15,8 @@ paths:
       tags:
         - Leave
       summary: Book Leave
+      servers:
+        - url: https://{mydomain}.my.salesforce.com/services/apexrest/xcdio/xcdapi/v1.0
       operationId: 'BookLeave'
       requestBody:
         description: Book Leave
@@ -48,18 +50,28 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BookLeaveApiResponseSuccess' 
-              example:
-                - success: true
-                  errors: []
-                  xcdio__Leave_Request__c: a10Q100000kS97VIAS
-                  Id: a29Q1000000t6zFIAQ
-                  record_Sequence: 1
-                - success: false
-                  errors: ["Sorry, the new Leave/Absence request could not be created as the dates entered for the new Leave/Absence request coincide/overlap with the dates of an existing Leave/Absence. Please confirm the dates and try again for the Role(s):  Dev"]
-                  xcdio__Leave_Request__c: null
-                  Id: null
-                  record_Sequence: 2
+                oneOf:
+                  - $ref: '#/components/schemas/BookLeaveApiResponseSuccess' 
+                  - $ref: '#/components/schemas/BookLeaveAsyncApiResponseSuccess'
+              examples:
+                synchronous:
+                  value:
+                    - success: true
+                      errors: []
+                      xcdio__Leave_Request__c: a10Q100000kS97VIAS
+                      Id: a29Q1000000t6zFIAQ
+                      record_Sequence: 1
+                    - success: false
+                      errors: ["Sorry, the new Leave/Absence request could not be created as the dates entered for the new Leave/Absence request coincide/overlap with the dates of an existing Leave/Absence. Please confirm the dates and try again for the Role(s):  Dev"]
+                      xcdio__Leave_Request__c: null
+                      Id: null
+                      record_Sequence: 2
+                asynchronous:
+                  value:
+                    - batch_Id: 1ea4b976fa600903
+                      errors: []
+                  
+                
         '400':
           description: Request Failed
           content:
@@ -118,18 +130,26 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BookLeaveApiResponseSuccess' 
-              example:
-                - success: true
-                  errors: []
-                  xcdio__Leave_Request__c: a10Q100000kS97VIAS
-                  Id: a29Q1000000t6zFIAQ
-                  record_Sequence: 1
-                - success: true
-                  errors: []
-                  xcdio__Leave_Request__c: a10S900000Mqng1IAB
-                  Id: a28S9000000TCAgIAO
-                  record_Sequence: 2
+                oneOf:
+                    - $ref: '#/components/schemas/BookLeaveApiResponseSuccess' 
+                    - $ref: '#/components/schemas/BookLeaveAsyncApiResponseSuccess'
+              examples:
+                synchronous:
+                  value:
+                    - success: true
+                      errors: []
+                      xcdio__Leave_Request__c: a10Q100000kS97VIAS
+                      Id: a29Q1000000t6zFIAQ
+                      record_Sequence: 1
+                    - success: true
+                      errors: []
+                      xcdio__Leave_Request__c: a10S900000Mqng1IAB
+                      Id: a28S9000000TCAgIAO
+                      record_Sequence: 2
+                asynchronous:
+                  value:
+                    - batch_Id: 1ea4b976fa600903
+                      errors: []
         '400':
           description: Request Failed
           content:
@@ -161,6 +181,80 @@ paths:
         
         default:
           description: Default error sample response
+  /graphql:
+    post:
+      tags:
+        - GraphQL API
+      summary: Query XCD Object Records
+      servers:
+        - url: https://{mydomain}.my.salesforce.com/services/data/v61.0/graphql
+      operationId: 'QueryRecords'
+      requestBody:
+        description: Query Batch Status
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  format: json
+                  description: GraphQL query.
+                  example:
+                     "query GetAsyncDetail($batchId: String!) { uiapi { query { xcdio__Leave_API__c(where: { xcdio__API_System_Attributes__r: { xcdio__Batch_Id__c: { eq: $batchId } } }) { edges { node { Id xcdio__API_System_Attributes__r { xcdio__Status__c { value } xcdio__CRUD_Type__c { value } xcdio__Success__c { value } } xcdio__Leave_Request__r { Id Name { value } xcdhcm__Approval_Status__c { value } } } } } } } }"
+                variables:
+                  type: string
+                  format: json
+                  description: GraphQL query variable values, if any. 
+                  example:
+                    {"batchId": "1ea4b976fa600903"}
+              required: 
+                - query
+            examples:
+                Query XCD Employee/Personal/Job role:
+                  value:
+                      query: "query GetEmployeeDetail($employeeId: ID!) { uiapi { query { xcdhcm__Employee_Detail__c(where: { Id: { eq: $employeeId } }) { edges { node { Name { value } xcdhcm__Employee_Number__c { value } xcdhcm__Work_email__c { value } xcdhcm__Start_Date__c { value } xcdhcm__Leaving_Date__c { value } xcdhcm__Payroll_start_date__c { value } xcdhcm__Personal_L__r { Id xcdhcm__First_name__c { value } xcdhcm__Middle_name__c { value } xcdhcm__Home_phone__c { value } } xcdhcm__Job_Role__r { xcdhcm__Department_L__r { xcdhcm__Departments_code__c { value } } } } } } } }"
+                      variables: { "employeeId": "a0WPt0000019TtRMAU" }
+                Query XCD API Aysnchronous Batch ID Status:
+                  value:
+                      query: "query GetAsyncDetail($batchId: String!) { uiapi { query { xcdio__Leave_API__c(where: { xcdio__API_System_Attributes__r: { xcdio__Batch_Id__c: { eq: $batchId } } }) { edges { node { Id xcdio__API_System_Attributes__r { xcdio__Status__c { value } xcdio__CRUD_Type__c { value } xcdio__Success__c { value } } xcdio__Leave_Request__r { Id Name { value } xcdhcm__Approval_Status__c { value } } } } } } } }"
+                      variables: { "batchId": "a0WPt0000019TtRMAU" }
+              
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    format: json
+                    description: GraphQL queried data.
+                    example: test
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                      format: json
+                    description: GraphQL query errors, if any. 
+                    example:
+              examples:
+                Query XCD Employee/Personal/Job role response:
+                  value:
+                      data: {}
+                      errors: [{"message":"Field 'xcdio__Statuss__c' does not exist on type 'xcdio__API_System_Attributes__r'.","locations":[{"line":5,"column":13}],"path":["edges",0,"node","xcdio__API_System_Attributes__r","xcdio__Statuss__c"],"extensions":{"code":"FIELD_NOT_FOUND","details":"The requested field does not exist in the schema."}}]
+                Query Aysnc Batch ID Response (Success):
+                  value:
+                      data: {"edges":[{"node":{"Id":"a28Pt000000x0LmIAI","xcdio__API_System_Attributes__r":{"xcdio__Status__c":{"value":"Completed"},"xcdio__CRUD_Type__c":{"value":"Create"},"xcdio__Success__c":{"value":true}},"xcdio__Leave_Request__r":{"Id":"a10Pt00000aqPQbIAM","Name":{"value":"LR-0018"},"xcdhcm__Approval_Status__c":{"value":"Approved"}}}}]}
+                      errors: []
+                        
+                Query Aysnc Batch ID Response (Error):
+                  value:
+                      data: {}
+                      errors: [{"message":"Field 'xcdio__Statuss__c' does not exist on type 'xcdio__API_System_Attributes__r'.","locations":[{"line":5,"column":13}],"path":["edges",0,"node","xcdio__API_System_Attributes__r","xcdio__Statuss__c"],"extensions":{"code":"FIELD_NOT_FOUND","details":"The requested field does not exist in the schema."}}]
 components:
   schemas:
     BookLeave:
@@ -179,7 +273,7 @@ components:
           example: xcdio__Leave_Request__c or xcdio__Leave_Request__c, xcdio__Approval_Status__c
         asynchronous:
           type: string
-          description: Request execution context. Synchronous requests will provide a response as part of the same request. Asynchronous requests return a single batch_Id for the entire array, which can be further queried for the request status and other fields.
+          description: Request execution context. Synchronous requests will provide a response as part of the same request. Asynchronous requests return a single batch_Id for the entire array, which can be further queried for the request status and other fields. Refer GraphQL API section in this document on how to query request details using batch_id. 
           format: boolean
           default: "false"
         allOrNone:
@@ -275,6 +369,19 @@ components:
           description: Sequence number of the record provided in the request array.
           example: 1
           
+    BookLeaveAsyncApiResponseSuccess:
+      type: object
+      properties:
+        batch_id:
+          type: string
+          example: "1ea4b976fa600903"
+          description: The status of the leave request record in the request array.
+        errors:
+          type: array
+          items:
+            type: string
+          example:  []
+          
     BookLeaveApiResponseFailure:
       type: object
       properties:
@@ -300,7 +407,7 @@ components:
             $ref: '#/components/schemas/EditLeaveRecordDetail' 
         asynchronous:
           type: string
-          description: Request execution context. Synchronous requests will provide a response as part of the same request. Asynchronous requests return a single batch_Id for the entire array, which can be further queried for the request status and other fields.
+          description: Request execution context. Synchronous requests will provide a response as part of the same request. Asynchronous requests return a single batch_Id for the entire array, which can be further queried for the request status and other fields. Refer GraphQL API section in this document on how to query request details using batch_id. 
           format: boolean
           default: "false"
         allOrNone:
@@ -320,8 +427,18 @@ components:
           type: string
           example: Cancelled
 servers:
-  - url: https://{mydomain}.my.salesforce.com/services/apexrest/xcdio/xcdapi/v1.0
-    variables: {}
+  - url: https://{mydomain}.my.salesforce.com/services/{uri}
+    #description: Server for different paths
+    variables:
+      URI:
+        enum:
+          - apexrest/xcdio/xcdapi/v1.0
+          - data/v61.0/graphql
+        default: apexrest/xcdio/xcdapi/v1.0
+        
+    
 tags:
-  - name: Leave
+  - name: Leave 
     description: 'Book, edit, and cancel leave in XCD'
+  - name: GraphQL API
+    description: 'Query XCD & Other Salesforce Object Records (URI - data/v61.0/graphql)'
