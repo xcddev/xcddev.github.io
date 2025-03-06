@@ -16,7 +16,7 @@ paths:
         - Leave
       summary: Book Leave
       servers:
-        - url: https://{mydomain}.my.salesforce.com/services/apexrest/xcdio/xcdapi/v1.0
+        - url: https://mydomain.my.salesforce.com/services/apexrest/xcdio/xcdapi/v1.0
       operationId: 'BookLeave'
       requestBody:
         description: Book Leave
@@ -24,24 +24,45 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/BookLeave'
-            example:
-              records:
-                - xcdio__Leave_Category__c: "Annual Leave"
-                  xcdio__Employee_Details__c: "a29Q1000000t6zFIAQ"
-                  xcdio__Start_Date__c: "2025-01-10"
-                  xcdio__Start_Date_AM_PM_All_Day__c: "All Day"
-                  xcdio__End_Date__c: "2025-01-12"
-                  xcdio__End_Date_AM_PM_All_Day__c: "All Day"
-                - xcdio__Leave_Category__c: "Annual Leave"
-                  xcdio__Employee_Details__c: "a29Q1000000t6zFIAQ"
-                  xcdio__Start_Date__c: "2025-02-05"
-                  xcdio__Start_Date_AM_PM_All_Day__c: "All Day"
-                  xcdio__End_Date__c: "2025-02-06"
-                  xcdio__End_Date_AM_PM_All_Day__c: "All Day"
-                  xcdio__Illness__c: "Other"
-              response_fields: "xcdio__Leave_Request__c"
-              asynchronous: "false"
-              allOrNone: "true"
+            examples:
+              Annual Leave:
+                value:
+                  records:
+                    - xcdio__Leave_Category__c: "Annual Leave"
+                      xcdio__Employee_Details__c: "a29Q1000000t6zFIAQ"
+                      xcdio__Start_Date__c: "2025-01-10"
+                      xcdio__Start_Date_AM_PM_All_Day__c: "All Day"
+                      xcdio__End_Date__c: "2025-01-12"
+                      xcdio__End_Date_AM_PM_All_Day__c: "All Day"
+                    - xcdio__Leave_Category__c: "Annual Leave"
+                      xcdio__Employee_Details__c: "a29Q1000000t6zFIAQ"
+                      xcdio__Start_Date__c: "2025-02-05"
+                      xcdio__Start_Date_AM_PM_All_Day__c: "All Day"
+                      xcdio__End_Date__c: "2025-02-06"
+                      xcdio__End_Date_AM_PM_All_Day__c: "All Day"
+                      xcdio__Notes__c: "Holiday"
+                  response_fields: "xcdio__Leave_Request__c"
+                  asynchronous: "false"
+                  allOrNone: "true"
+              Sick Leave:
+                value:
+                  records:
+                    - xcdio__Leave_Category__c: "Sick Leave"
+                      xcdio__Employee_Details__c: "a29Q1000000t6zFIAQ"
+                      xcdio__Start_Date__c: "2025-01-10"
+                      xcdio__Start_Date_AM_PM_All_Day__c: "All Day"
+                      xcdio__End_Date__c: "2025-01-12"
+                      xcdio__End_Date_AM_PM_All_Day__c: "All Day"
+                      xcdio__Illness__c: "Other"
+                    - xcdio__Leave_Category__c: "Sick Leave"
+                      xcdio__Employee_Details__c: "a29Q1000000t6zFIAQ"
+                      xcdio__Start_Date__c: "2025-02-05"
+                      xcdio__Start_Date_AM_PM_All_Day__c: "All Day"
+                      xcdio__Expected_return_to_work_date__c: "2025-02-7"
+                      xcdio__Illness__c: "Infection"
+                  response_fields: "xcdio__Leave_Request__c"
+                  asynchronous: "false"
+                  allOrNone: "true"
               
         required: true
       responses:
@@ -187,7 +208,7 @@ paths:
         - GraphQL API
       summary: Query XCD Object Records
       servers:
-        - url: https://{mydomain}.my.salesforce.com/services/data/v61.0/graphql
+        - url: https://mydomain.my.salesforce.com/services/data/v61.0/graphql
       operationId: 'QueryRecords'
       requestBody:
         description: Query Batch Status
@@ -343,6 +364,19 @@ components:
             - Other
           description: Applicable for sickness only. The enum values may vary depending on client customizations.
           example: Other
+        xcdio__Expected_return_to_work_date__c:
+          type: string
+          format: date
+          description: Expected reurn to work date. Applicable for sickness only.
+          example: '2025-01-10'
+        xcdio__Industrial_injury__c:
+          type: string
+          format: boolean
+          description: Industrial Injury. Applicable for sickness only.
+          example: false
+        xcdio__Notes__c:
+          type: string
+          description: Leave Notes.
           
     BookLeaveApiResponseSuccess:
       type: object
@@ -427,10 +461,10 @@ components:
           type: string
           example: Cancelled
 servers:
-  - url: https://mydomain.my.salesforce.com/services/{uri}
+  - url: https://mydomain.my.salesforce.com/services/{URI}
     #description: Server for different paths
     variables:
-      uri:
+      URI:
         enum:
           - apexrest/xcdio/xcdapi/v1.0
           - data/v61.0/graphql
